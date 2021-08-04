@@ -1,15 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <SalaryInput @new-salary="updateSalary"></SalaryInput>
+  <Breakdown :salary="salary"/>
+  <!-- <p> your salary is {{salary}}</p> -->
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import SalaryInput from './components/SalaryInput.vue';
+import Breakdown from './components/BreakdownTable.vue'
 
 export default {
+  data(){
+    return{
+      salary: null,
+    }
+  },
   name: 'App',
   components: {
-    HelloWorld
+    SalaryInput,
+    Breakdown
+    
+  },
+  methods:{
+    updateSalary(salary){
+      this.salary = salary;
+    }
   }
 }
 </script>

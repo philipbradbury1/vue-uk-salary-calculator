@@ -2,8 +2,8 @@
 <div>
     <p> your salary is {{salary}}</p>
 </div> 
- <div>{{year}}</div>
- <div>year data{{yearly}}</div>
+ <div>{{views.year}}</div>
+ <div>year data{{yearlySalary}}</div>
   <table>
     <thead>
       <tr>
@@ -18,27 +18,49 @@
     </thead>
 
     <tbody>
-      <tr v-if="year">
+      
+      <tr v-if="views.year">
         <td>Yearly</td>
-        <td v-for="(data, index) in yearly" :key="`year-${index}`">
+        <td v-for="(data, index) in yearlySalary" :key="`year-${index}`">
           {{data}}
         </td> 
 
       </tr>
 
-       <tr v-if="month">
+       <tr v-if="views.month">
         <td>Month</td>
-        <td>£100</td>
-        <td>£100</td>
-        <td>£100</td>
-        <td>£100</td>
-        <td>£100</td>
+        <td v-for="(data, index) in monthSalary" :key="`month-${index}`">
+          {{data}}
+        </td> 
+    
       </tr>
+
+       <tr v-if="views.weekly4">
+        <td>weekly4</td>
+    
+      </tr>
+
+       <tr v-if="views.weekly2">
+        <td>weekly2</td>
+    
+      </tr>
+
+       <tr v-if="views.weekly">
+        <td>weekly</td>
+         <td v-for="(data, index) in weeklySalary" :key="`month-${index}`">
+          {{data}}
+        </td> 
+    
+      </tr>
+
+      <tr v-if="views.daily">
+        <td>daily</td>
+    
+      </tr>
+
+
     </tbody>
   </table>
-<!--
-<button @click="yearly">click here</button>
-<div>{{yearly()}}</div>-->
 
 </template>
 
@@ -71,39 +93,62 @@ var nationalInsurance = function(salary){
 }
 
 export default {
-  props:['salary'],
+  props:['salary','checkedViews'],
    data(){
        return {
          taxFree: 12570,
-         year: true,
-         month: true,
+         views:{
+          year: false,
+          month: false,
+          weekly4: false,
+          weekly2:false,
+          weekly: false,
+          daily: false
+         }
+       
        }
    },
-
+ 
+   watch:{
+     checkedViews: function(val){
+        for (const property in this.views) {
+          if(val.includes(property) ){
+            this.views[property] = true;
+          }else{
+            this.views[property] = false;
+          }
+        }
+     }
+   },
    computed:{
-
-     yearly(){
+     yearlySalary(){
         if(this.salary > 0){
           let salary = this.salary;
           let taxable = ((this.salary - this.taxFree) < 0)? 0 : this.salary - this.taxFree ;
           let tax = taxFun(salary); 
           let nI = nationalInsurance(salary);
           let takeHome = salary - (tax + nI);
-          return[salary, taxable, tax, nI, takeHome];
-        }
-        return null
-      
-     },
-     monthly(){
-        if(this.month){
-          this.yearly().map()
+          console.log('thissall')
+          return [salary, taxable, tax, nI, takeHome];
+          
         }
         return null
      },
-
+     monthSalary(){
+        if(this.views.month){
+          const month = this.yearlySalary.map(x => x / 12)
+          return month
+        }
+        return null
+     },
+     weeklySalary(){
+        if(this.views.weekly){
+          const week = this.yearlySalary.map(x => x / 52)
+          return week
+        }
+        return null
+     },
    },
-  
-   
 }
 </script>
 

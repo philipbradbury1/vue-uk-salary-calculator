@@ -1,15 +1,16 @@
 <template>
   <SalaryInput @new-salary="updateSalary"></SalaryInput>
+  <StudentLoan @checked-loans="updateLoans"></StudentLoan>
   <TableViewSelector @checked-views="updateViews"/>
-  <Breakdown :salary="salary" :checkedViews="checkedViews"/>
-   <!--<p> your salary is {{salary}}</p> -->
- <!-- <span>Checked names: {{ checkedViews }}</span> -->
+  <Breakdown :salary="salary" :checkedViews="checkedViews"  :checkedLoans="checkedLoans"/>
+
 </template>
 
 <script>
 
 import SalaryInput from './components/SalaryInput.vue';
 import Breakdown from './components/BreakdownTable.vue';
+import StudentLoan from './components/StudentLoan.vue';
 import TableViewSelector from './components/TableViewSelector.vue';
 
 export default {
@@ -17,14 +18,15 @@ export default {
     return{
       salary: null,
       checkedViews: [],
+      checkedLoans: [],
     }
   },
   name: 'App',
   components: {
     SalaryInput,
     Breakdown,
-    TableViewSelector
-    
+    TableViewSelector,
+    StudentLoan
   },
   methods:{
     updateSalary(salary){
@@ -32,7 +34,9 @@ export default {
     },
     updateViews(views){
       this.checkedViews = views;
-
+    },
+    updateLoans(loans){
+      this.checkedLoans = loans; 
     }
   }
 }

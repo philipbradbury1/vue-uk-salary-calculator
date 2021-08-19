@@ -1,14 +1,29 @@
 <template>
     <h2>table check list</h2>
-    <input type="checkbox" id="year" value="year" v-model="checkedViews" @change="checkViews">
-    <input type="checkbox" id="monthly" value="month" v-model="checkedViews" @change="checkViews">
-    <input type="checkbox" id="weekly4" value="weekly4" v-model="checkedViews" @change="checkViews">
-    <input type="checkbox" id="weekly2" value="weekly2" v-model="checkedViews" @change="checkViews">
-    <input type="checkbox" id="weekly" value="weekly" v-model="checkedViews" @change="checkViews">
-    <input type="checkbox" id="daily" value="daily" v-model="checkedViews" @change="checkViews">
-
-    
-
+    <label for="Year">
+        <input type="checkbox" id="Year" value="Year" v-model="checkedViews.Year" @change="checkViews">
+        Year
+    </label>
+    <label for="Month">
+        <input type="checkbox" id="Monthly" value="Month" v-model="checkedViews.Month" @change="checkViews">
+        Month
+    </label>
+    <label for="Weekly4">
+        <input type="checkbox" id="Weekly4" value="Weekly4" v-model="checkedViews.Weekly4" @change="checkViews">
+        Weekly 4
+    </label>
+    <label for="Weekly2">
+        <input type="checkbox" id="Weekly2" value="Weekly2" v-model="checkedViews.Weekly2" @change="checkViews">
+        Weekly 2
+    </label>
+    <label for="Weekly">
+        <input type="checkbox" id="Weekly" value="Weekly" v-model="checkedViews.Weekly" @change="checkViews">
+        Weekly
+    </label>
+    <label for="Daily">
+        <input type="checkbox" id="Daily" value="Daily" v-model="checkedViews.Daily" @change="checkViews">
+        Daily
+    </label>
 </template>
 
 <script>
@@ -16,12 +31,19 @@ export default {
     emits:['checked-views'],
     data() {
         return{
-            checkedViews: []
+            checkedViews: 
+            {
+                Year: false,
+                Month: false,
+                Weekly4: false,
+                Weekly2: false,
+                Weekly: false,
+                Daily: false,
+            }
         }
     },
     methods:{
         checkViews(){
-
             this.$emit('checked-views', this.checkedViews)
         }
     }

@@ -1,67 +1,21 @@
 <template>
-<div>
-    <p> your salary is {{salary}}</p>
-</div> 
- <div>{{views.year}}</div>
- <div>year data{{yearlySalary}}</div>
   <table>
     <thead>
       <tr>
-        <th>&nbsp;</th>
-        <th>Gross Income</th>
-        <th>Taxable Income</th>
-        <th>Tax</th>
-        <th>National Insurance</th>
-        <th>2021 Take Home</th>
-        <th>2020 Take Home</th>
+        <th class="oneline">&nbsp;</th>
+        <th class="cell">Gross Income</th>
+        <th class="cell">Taxable Income</th>
+        <th class="cell">Tax</th>
+        <th class="cell">National Insurance</th>
+        <th class="cell">2021 Take Home</th>
+        <th class="cell">2020 Take Home</th>
       </tr>
     </thead>
-
     <tbody>
-      
-      <tr v-if="views.year">
-        <td>Yearly</td>
-        <td v-for="(data, index) in yearlySalary" :key="`year-${index}`">
-          {{data}}
-        </td> 
-
-      </tr>
-
-       <tr v-if="views.month">
-        <td>Month</td>
-        <td v-for="(data, index) in monthSalary" :key="`month-${index}`">
-          {{data}}
-        </td> 
-    
-      </tr>
-
-       <tr v-if="views.weekly4">
-        <td>weekly4</td>
-    
-      </tr>
-
-       <tr v-if="views.weekly2">
-        <td>weekly2</td>
-    
-      </tr>
-
-       <tr v-if="views.weekly">
-        <td>weekly</td>
-         <td v-for="(data, index) in weeklySalary" :key="`month-${index}`">
-          {{data}}
-        </td> 
-    
-      </tr>
-
-      <tr v-if="views.daily">
-        <td>daily</td>
-    
-      </tr>
-
-
+      <TableTr v-for="view in views" :item="view" :salary="yearlySalary" :key="view.id"></TableTr>
     </tbody>
   </table>
-
+{{checkedLoans}}
 </template>
 
 <script>
@@ -92,67 +46,128 @@ var nationalInsurance = function(salary){
     }
 }
 
+
+import TableTr from './TableTr.vue';
+
 export default {
-  props:['salary','checkedViews'],
+  props:['salary','checkedViews', 'checkedLoans'],
+  components: {
+    TableTr,
+  },
    data(){
-       return {
-         taxFree: 12570,
-         views:{
-          year: false,
-          month: false,
-          weekly4: false,
-          weekly2:false,
-          weekly: false,
-          daily: false
-         }
-       
-       }
+      return {
+        taxFree: 12570,
+        studentLoan: 0,
+        views:[
+          {
+            id: 'year123',
+            name: 'Year',
+            show: false,
+          },
+          {
+            id: 'month123',
+            name: 'Month',
+            show: false,
+          },
+          {
+            id: 'weekly4123',
+            name: 'Weekly4',
+            show: false,
+          },
+          {
+            id: 'weekly2123',
+            name: 'Weekly2',
+            show: false,
+          },
+          {
+            id: 'weekly123',
+            name: 'Weekly',
+            show: false,
+          },
+          {
+            id: 'daily123',
+            name: 'Daily',
+            show: false,
+          },
+        ],
+      }
    },
  
    watch:{
-     checkedViews: function(val){
-        for (const property in this.views) {
-          if(val.includes(property) ){
-            this.views[property] = true;
-          }else{
-            this.views[property] = false;
+    checkedViews: {
+      
+      deep:true,
+      
+      handler(val){
+
+        for (const property in val) {
+
+          var prop = property;
+
+          for (const view in  this.views) {
+
+            if(prop == this.views[view].name){
+              this.views[view].show = val[property]
+            }
+            
           }
+        } 
+      }
+    },
+     checkedLoans: {
+
+       deep:true,
+
+       handler(val){
+
+        if(this.salary > 19884){
+
+         if(val.repaymentplan1){
+
+            Math.floor( (this.salary - 19884) / 12 * 0.09 )
+           
+          }
+            
         }
-     }
+
+        if(this.salary > 21000){
+
+          if(val.postgradloan){
+            Math.floor( (this.salary - 21000) / 12 * 0.06 )
+          }
+
+        }
+
+          return this.studentLoan;
+       }
+    }
    },
    computed:{
      yearlySalary(){
+
         if(this.salary > 0){
+        
           let salary = this.salary;
           let taxable = ((this.salary - this.taxFree) < 0)? 0 : this.salary - this.taxFree ;
           let tax = taxFun(salary); 
           let nI = nationalInsurance(salary);
+          //let loan = this.studentLoan;
           let takeHome = salary - (tax + nI);
-          console.log('thissall')
-          return [salary, taxable, tax, nI, takeHome];
+
+          return [Number(salary), taxable, tax, nI, takeHome];
           
         }
         return null
-     },
-     monthSalary(){
-        if(this.views.month){
-          const month = this.yearlySalary.map(x => x / 12)
-          return month
-        }
-        return null
-     },
-     weeklySalary(){
-        if(this.views.weekly){
-          const week = this.yearlySalary.map(x => x / 52)
-          return week
-        }
-        return null
-     },
+     }
+    
    },
+  
+  
+
 }
 </script>
 
-<style scoped>
+<style >
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -174,6 +189,40 @@ tbody{
 td,
 th{
   display: block;
+}
+
+th:nth-child(even),
+tr:nth-child(even),
+ td:nth-child(even){
+    background: rgba(0, 0, 0, .05);
+}
+
+.cell:not(:last-child) {
+    border-bottom: 0;
+}
+
+.oneline {
+    line-height: 48px;
+}
+
+
+.cell{
+    line-height: 48px;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-left: none;
+    padding: 0 8px;
+    min-height: 49px;
+    text-align: right;
+}
+
+th.cell {
+    border-left: 1px solid rgba(0, 0, 0, .1);
+    width: 168px;
+    text-align: left;
+}
+
+.coloum-width{
+  width:150px
 }
 
 </style>

@@ -4,9 +4,11 @@
       <tr>
         <th class="oneline">&nbsp;</th>
         <th class="cell">Gross Income</th>
+        <th v-if="pensionAmount > 0" class="cell">Pension Deductions</th>
         <th class="cell">Taxable Income</th>
         <th class="cell">Tax</th>
         <th class="cell">National Insurance</th>
+        <th v-if="studentLoan > 0" class="cell">Student Loan</th>
         <th class="cell">2021 Take Home</th>
         <th class="cell">2020 Take Home</th>
       </tr>
@@ -15,7 +17,7 @@
       <TableTr v-for="view in views" :item="view" :salary="yearlySalary" :key="view.id"></TableTr>
     </tbody>
   </table>
-{{checkedLoans}}
+
 </template>
 
 <script>
@@ -36,64 +38,68 @@ var taxFun = function(salary){
 }
 
 var nationalInsurance = function(salary){
-  //check first limit
-    if(salary <= 9564){
-      return 0
-    }else if(salary <= 50268){
-      return (salary - 9564) * 0.12
-    }else{
-      return (salary - 50268)  * 0.02  + 4884.48
-    }
+ 
+  if(salary <= 9564){
+    return 0
+  }else if(salary <= 50268){
+    return (salary - 9564) * 0.12
+  }else{
+    return (salary - 50268)  * 0.02  + 4884.48
+  }
 }
-
 
 import TableTr from './TableTr.vue';
 
 export default {
-  props:['salary','checkedViews', 'checkedLoans'],
+  props:['salary','checkedViews', 'checkedLoans', 'pension'],
+
+
   components: {
     TableTr,
   },
-   data(){
-      return {
-        taxFree: 12570,
-        studentLoan: 0,
-        views:[
-          {
-            id: 'year123',
-            name: 'Year',
-            show: false,
-          },
-          {
-            id: 'month123',
-            name: 'Month',
-            show: false,
-          },
-          {
-            id: 'weekly4123',
-            name: 'Weekly4',
-            show: false,
-          },
-          {
-            id: 'weekly2123',
-            name: 'Weekly2',
-            show: false,
-          },
-          {
-            id: 'weekly123',
-            name: 'Weekly',
-            show: false,
-          },
-          {
-            id: 'daily123',
-            name: 'Daily',
-            show: false,
-          },
-        ],
-      }
-   },
+
+
+  data(){
+    return {
+      taxFree: 12570,
+      studentLoan: 0,
+      pensionAmount: 0,
+      views:[
+        {
+          id: 'year123',
+          name: 'Year',
+          show: false,
+        },
+        {
+          id: 'month123',
+          name: 'Month',
+          show: false,
+        },
+        {
+          id: 'weekly4123',
+          name: 'Weekly4',
+          show: false,
+        },
+        {
+          id: 'weekly2123',
+          name: 'Weekly2',
+          show: false,
+        },
+        {
+          id: 'weekly123',
+          name: 'Weekly',
+          show: false,
+        },
+        {
+          id: 'daily123',
+          name: 'Daily',
+          show: false,
+        },
+      ],
+    }
+  },
  
-   watch:{
+  watch:{
     checkedViews: {
       
       deep:true,
@@ -114,47 +120,58 @@ export default {
         } 
       }
     },
-     checkedLoans: {
+    checkedLoans: {
 
        deep:true,
 
        handler(val){
 
-        if(this.salary > 19884){
+          let totalLoan = 0;
 
-         if(val.repaymentplan1){
-
-            Math.floor( (this.salary - 19884) / 12 * 0.09 )
-           
-          }
-            
-        }
-
-        if(this.salary > 21000){
-
-          if(val.postgradloan){
-            Math.floor( (this.salary - 21000) / 12 * 0.06 )
+          if(this.salary > 19884 && val.repaymentplan1){
+            totalLoan += Math.floor( ((this.salary - 19884) / 12).toFixed(5) * 0.09 ); 
           }
 
-        }
+          if(this.salary > 27288 && val.repaymentplan2 && !val.repaymentplan1){
+            totalLoan += Math.floor( ((this.salary - 27288) / 12).toFixed(5) * 0.09 );
+          }
 
-          return this.studentLoan;
+          if(this.salary > 21000 && val.postgradloan){
+            totalLoan += Math.trunc( ((this.salary - 21000) /12 ).toFixed(5) * 0.06  );
+          }
+            return this.studentLoan = totalLoan;
        }
-    }
-   },
+    },
+
+      pension:function(){
+
+           let tempSal = this.salary
+
+          if(tempSal > 6240){
+
+            if(tempSal > 50270){ tempSal = 50270}
+            
+            return this.pensionAmount = (tempSal - 6240) / 100 * this.pension
+          }
+
+        return this.pensionAmount = 0
+
+      }
+    },
    computed:{
      yearlySalary(){
 
         if(this.salary > 0){
         
           let salary = this.salary;
+          let pension = this.pensionAmount;
           let taxable = ((this.salary - this.taxFree) < 0)? 0 : this.salary - this.taxFree ;
           let tax = taxFun(salary); 
           let nI = nationalInsurance(salary);
-          //let loan = this.studentLoan;
+          let loan = this.studentLoan;
           let takeHome = salary - (tax + nI);
 
-          return [Number(salary), taxable, tax, nI, takeHome];
+          return [Number(salary),pension, taxable, tax, nI, loan, takeHome];
           
         }
         return null
@@ -162,8 +179,6 @@ export default {
     
    },
   
-  
-
 }
 </script>
 
@@ -222,7 +237,7 @@ th.cell {
 }
 
 .coloum-width{
-  width:150px
+  width:200px
 }
 
 </style>

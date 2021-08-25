@@ -7,13 +7,13 @@
 
 <script>
 export default {
+    emits:['new-salary'],
     data(){
        return {
            salary: '',
        }
 
    },
-   emits:['new-salary'],
    methods: {
        getNewSalary(){
            this.$emit('new-salary', this.salary)

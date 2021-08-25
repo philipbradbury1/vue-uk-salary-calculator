@@ -1,7 +1,7 @@
 <template>
      <tr v-if="item.show" class="coloum-width">
         <td class="cell">{{item.name }}</td>
-        <td v-for="(data, index) in salaryConvert(salary)" :key="`tr-${index}`" class="cell">
+        <td v-for="(data, index) in salaryValue" :key="`tr-${index}`" class="cell salary-value">
             £ {{data}}
         </td> 
       </tr>
@@ -15,6 +15,14 @@ export default {
 
         }
     },
+    computed:{
+        salaryValue: function(){
+            return this.salaryConvert(this.salary).filter(function(s){
+                return s > 0 
+            })
+        }
+
+    },
     methods:{
         salaryConvert(salary){
 
@@ -22,7 +30,6 @@ export default {
                 console.log(salary)
                 return salary.map(x => x.toFixed(2) );
             }
-
             if(this.item.name == 'Month'){
                  const month = this.salary.map(x => (x / 12).toFixed(2))
                 return month

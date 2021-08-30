@@ -1,19 +1,39 @@
 <template>
-  <SalaryInput @new-salary="updateSalary"></SalaryInput>
-  <StudentLoan @checked-loans="updateLoans"></StudentLoan>
-  <PensionInput @pension-amount="updatePension"></PensionInput>
+
+
+ <SalaryInput @new-salary="updateSalary"></SalaryInput>
+
+
+
+  <div>
+    <Tabs @tab-name="updateTab">
+      <Tab :currentTab="currentTab" title="Tab 1"><TaxCode></TaxCode></Tab>
+      <Tab :currentTab="currentTab" title="Tab 2"><StudentLoan @checked-loans="updateLoans"></StudentLoan></Tab>
+      <Tab :currentTab="currentTab" title="Tab 3"><PensionInput @pension-amount="updatePension"></PensionInput></Tab>
+      <Tab :currentTab="currentTab" title="Tab 4">Hello From Tab 4</Tab>
+    </Tabs>
+  </div>
+
+
+ 
+  
+  
+  
   <TableViewSelector @checked-views="updateViews"/>
   <Breakdown :salary="salary" :checkedViews="checkedViews" :pension="pension" :checkedLoans="checkedLoans"/>
-<h3>pension app {{pension}}</h3>
 </template>
 
 <script>
 
+
 import SalaryInput from './components/SalaryInput.vue';
-import Breakdown from './components/BreakdownTable.vue';
+import TaxCode from './components/TaxCode.vue';
 import StudentLoan from './components/StudentLoan.vue';
 import PensionInput from './components/PensionInput.vue';
+import Breakdown from './components/BreakdownTable.vue';
 import TableViewSelector from './components/TableViewSelector.vue';
+import Tab from './components/Tab.vue';
+import Tabs from './components/Tabs.vue';
 
 
 export default {
@@ -23,15 +43,19 @@ export default {
       pension: null,
       checkedViews: [],
       checkedLoans: [],
+      currentTab: 'Tab 1'
     }
   },
   name: 'App',
   components: {
     SalaryInput,
+    TaxCode,
     Breakdown,
     TableViewSelector,
     StudentLoan,
-    PensionInput
+    PensionInput,
+    Tab,
+    Tabs
   },
   methods:{
     updateSalary(salary){
@@ -45,6 +69,9 @@ export default {
     },
     updateLoans(loans){
       this.checkedLoans = loans; 
+    },
+    updateTab(tab){
+      this.currentTab = tab ;
     }
    
   }

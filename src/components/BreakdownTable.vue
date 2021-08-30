@@ -52,13 +52,9 @@ import TableTr from './TableTr.vue';
 
 export default {
   props:['salary','checkedViews', 'checkedLoans', 'pension'],
-
-
   components: {
     TableTr,
   },
-
-
   data(){
     return {
       taxFree: 12570,

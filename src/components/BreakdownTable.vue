@@ -17,7 +17,6 @@
       <TableTr v-for="view in views" :item="view" :salary="yearlySalary" :key="view.id"></TableTr>
     </tbody>
   </table>
-
 </template>
 
 <script>
@@ -51,7 +50,7 @@ var nationalInsurance = function(salary){
 import TableTr from './TableTr.vue';
 
 export default {
-  props:['salary','checkedViews', 'checkedLoans', 'pension'],
+  props:['salary','checkedViews', 'checkedLoans', 'pension', 'taxCode' ],
   components: {
     TableTr,
   },
@@ -60,6 +59,7 @@ export default {
       taxFree: 12570,
       studentLoan: 0,
       pensionAmount: 0,
+      userTaxCode: this.taxCode,
       views:[
         {
           id: 'year123',
@@ -94,7 +94,6 @@ export default {
       ],
     }
   },
- 
   watch:{
     checkedViews: {
       
@@ -138,22 +137,21 @@ export default {
             return this.studentLoan = totalLoan;
        }
     },
+    pension:function(){
 
-      pension:function(){
+        let tempSal = this.salary
 
-           let tempSal = this.salary
+        if(tempSal > 6240){
 
-          if(tempSal > 6240){
+          if(tempSal > 50270){ tempSal = 50270}
+          
+          return this.pensionAmount = (tempSal - 6240) / 100 * this.pension
+        }
 
-            if(tempSal > 50270){ tempSal = 50270}
-            
-            return this.pensionAmount = (tempSal - 6240) / 100 * this.pension
-          }
-
-        return this.pensionAmount = 0
-
-      }
+      return this.pensionAmount = 0
     },
+
+  },
    computed:{
      yearlySalary(){
 

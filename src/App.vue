@@ -1,26 +1,17 @@
 <template>
 
-
  <SalaryInput @new-salary="updateSalary"></SalaryInput>
-
-
 
   <div>
     <Tabs @tab-name="updateTab">
-      <Tab :currentTab="currentTab" title="Tab 1"><TaxCode></TaxCode></Tab>
-      <Tab :currentTab="currentTab" title="Tab 2"><StudentLoan @checked-loans="updateLoans"></StudentLoan></Tab>
-      <Tab :currentTab="currentTab" title="Tab 3"><PensionInput @pension-amount="updatePension"></PensionInput></Tab>
-      <Tab :currentTab="currentTab" title="Tab 4">Hello From Tab 4</Tab>
+      <Tab :currentTab="currentTab" title="Tax Code"><TaxCode @tax-code="updateTaxCode"></TaxCode></Tab>
+      <Tab :currentTab="currentTab" title="Student Loan"><StudentLoan @checked-loans="updateLoans"></StudentLoan></Tab>
+      <Tab :currentTab="currentTab" title="Pension"><PensionInput @pension-amount="updatePension"></PensionInput></Tab>
     </Tabs>
   </div>
-
-
- 
-  
-  
   
   <TableViewSelector @checked-views="updateViews"/>
-  <Breakdown :salary="salary" :checkedViews="checkedViews" :pension="pension" :checkedLoans="checkedLoans"/>
+  <Breakdown :salary="salary" :checkedViews="checkedViews" :pension="pension" :checkedLoans="checkedLoans" :taxCode="taxCode"/>
 </template>
 
 <script>
@@ -40,10 +31,11 @@ export default {
   data(){
     return{
       salary: null,
+      taxCode: null,
       pension: null,
       checkedViews: [],
       checkedLoans: [],
-      currentTab: 'Tab 1'
+      currentTab: 'Tax Code'
     }
   },
   name: 'App',
@@ -61,6 +53,9 @@ export default {
     updateSalary(salary){
       this.salary = salary;
     },
+    updateTaxCode(taxCode){
+      this.taxCode = taxCode;
+    },
     updatePension(pension){
       this.pension = pension;
     },
@@ -73,7 +68,6 @@ export default {
     updateTab(tab){
       this.currentTab = tab ;
     }
-   
   }
 }
 </script>
@@ -86,5 +80,20 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+input{
+  padding: 0px 8px;
+  font-size: 2rem
+}
+
+button{
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 </style>

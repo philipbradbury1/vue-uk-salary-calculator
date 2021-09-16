@@ -7,9 +7,11 @@
       <Tab :currentTab="currentTab" title="Tax Code"><TaxCode @tax-code="updateTaxCode"></TaxCode></Tab>
       <Tab :currentTab="currentTab" title="Student Loan"><StudentLoan @checked-loans="updateLoans"></StudentLoan></Tab>
       <Tab :currentTab="currentTab" title="Pension"><PensionInput @pension-amount="updatePension"></PensionInput></Tab>
+      <Tab :currentTab="currentTab" title="Overtime"><Overtime></Overtime></Tab>
     </Tabs>
   </div>
   
+  <TaxYear></TaxYear>
   <TableViewSelector @checked-views="updateViews"/>
   <Breakdown :salary="salary" :checkedViews="checkedViews" :pension="pension" :checkedLoans="checkedLoans" :taxCode="taxCode"/>
 </template>
@@ -20,11 +22,13 @@
 import SalaryInput from './components/SalaryInput.vue';
 import TaxCode from './components/TaxCode.vue';
 import StudentLoan from './components/StudentLoan.vue';
+import Overtime from './components/Overtime.vue';
 import PensionInput from './components/PensionInput.vue';
 import Breakdown from './components/BreakdownTable.vue';
 import TableViewSelector from './components/TableViewSelector.vue';
 import Tab from './components/Tab.vue';
 import Tabs from './components/Tabs.vue';
+import TaxYear from './components/TaxYear.vue';
 
 
 export default {
@@ -47,7 +51,9 @@ export default {
     StudentLoan,
     PensionInput,
     Tab,
-    Tabs
+    Tabs,
+    Overtime,
+    TaxYear
   },
   methods:{
     updateSalary(salary){

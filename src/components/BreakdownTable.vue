@@ -20,20 +20,15 @@
 </template>
 
 <script>
-var taxFun = function(salary){
 
-  if(salary <= 12570){
-    return 0
-  }
-  else if (salary <= 50270){
-    return (salary - 12570) * 0.20 
-  }
-  else if(salary <= 150000){
-    return (salary - 50270) * 0.40 + 7540 
-  }
-  else if(salary > 150001){
-    return (salary - 150000) * 0.45 + 52460
-  }
+function taxLetter(code){
+
+  let codes = ['OT', 'BR', 'C' , 'COT','CBR','CD0','CD1','D0','D1','L','M','N','NT','S','SOT','SBR','SD0','SD1','SD2','T'];
+
+  let confirmedCode = codes.find(element => code.includes(element));
+
+  return confirmedCode
+
 }
 
 var nationalInsurance = function(salary){
@@ -47,6 +42,7 @@ var nationalInsurance = function(salary){
   }
 }
 
+
 import TableTr from './TableTr.vue';
 
 export default {
@@ -59,7 +55,7 @@ export default {
       taxFree: 12570,
       studentLoan: 0,
       pensionAmount: 0,
-      userTaxCode: this.taxCode,
+      userTaxCode: null,
       views:[
         {
           id: 'year123',
@@ -95,6 +91,11 @@ export default {
     }
   },
   watch:{
+    taxCode: function(val){
+
+      this.userTaxCode = val;
+
+    },
     checkedViews: {
       
       deep:true,
@@ -105,7 +106,7 @@ export default {
 
           var prop = property;
 
-          for (const view in  this.views) {
+          for (const view in this.views) {
 
             if(prop == this.views[view].name){
               this.views[view].show = val[property]
@@ -156,22 +157,69 @@ export default {
      yearlySalary(){
 
         if(this.salary > 0){
+
+          console.log('tax check',this.taxFree)
         
           let salary = this.salary;
           let pension = this.pensionAmount;
-          let taxable = ((this.salary - this.taxFree) < 0)? 0 : this.salary - this.taxFree ;
-          let tax = taxFun(salary); 
+          let tax = this.taxAmount(salary, this.userTaxCode); 
+          let taxable = ((this.salary - this.taxFree) < 0)? 0 : this.salary - this.taxFree;
           let nI = nationalInsurance(salary);
           let loan = this.studentLoan;
           let takeHome = salary - (tax + nI);
 
-          return [Number(salary),pension, taxable, tax, nI, loan, takeHome];
+          return [Number(salary),pension, tax, taxable, nI, loan, takeHome];
           
         }
         return null
-     }
-    
+     },
+     
    },
+   methods:{
+
+     taxAmount: function(salary, taxCode){
+
+      let confirmedTaxCode = null;
+
+      if(taxCode != null) {
+        confirmedTaxCode = taxLetter(taxCode);
+      }
+
+      if(confirmedTaxCode == null  || confirmedTaxCode == 'L' ){
+
+        let taxFreeAmount = 12570;
+
+        if(confirmedTaxCode == "L"){
+
+          taxFreeAmount = taxCode.replace(confirmedTaxCode,'0')
+
+        }
+
+        this.taxFree = taxFreeAmount
+      
+        if(salary <= taxFreeAmount){
+          return 0
+        }
+        else if (salary <= 50270){
+          return (salary - taxFreeAmount) * 0.20 
+        }
+        else if(salary <= 150000){
+          return (salary - 50270) * 0.40 + 7540 
+        }
+        else if(salary > 150001){
+          return (salary - 150000) * 0.45 + 52460
+        }
+      }
+
+      if(taxCode == 'BR'){
+        return salary * 0.20
+      }
+
+      return null
+
+    }
+     
+   }
   
 }
 </script>

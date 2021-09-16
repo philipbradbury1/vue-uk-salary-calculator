@@ -1,7 +1,9 @@
 <template>
-    <div><h2>Enter your salary here for a full breakdown £
-    <input v-model="salary" type="number" name="salary"></h2></div>
-    <button @click="getNewSalary">Submit</button>
+    <div class="panel">
+        <div><h2>Enter your salary here for a full breakdown £
+        <input v-model="salary" type="number" name="salary"></h2></div>
+        <button @click="getNewSalary">Submit</button>
+    </div>
 
 </template>
 

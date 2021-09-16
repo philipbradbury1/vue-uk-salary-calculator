@@ -33,12 +33,12 @@ export default {
         return{
             checkedViews: 
             {
-                Year: false,
+                Year: true,
                 Month: false,
                 Weekly4: false,
                 Weekly2: false,
-                Weekly: false,
-                Daily: false,
+                Weekly: true,
+                Daily: true,
             }
         }
     },

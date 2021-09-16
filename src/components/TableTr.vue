@@ -21,7 +21,6 @@ export default {
                 return s > 0 
             })
         }
-
     },
     methods:{
         salaryConvert(salary){

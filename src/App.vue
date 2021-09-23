@@ -79,27 +79,40 @@ export default {
 </script>
 
 <style>
+
+html,
+body{
+  margin: 0;
+    background: #f2f2f2;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  max-width: 80%;
+  margin: 30px auto;
 }
 
 input{
   padding: 0px 8px;
-  font-size: 2rem
+  font-size: 2rem;
+  width: 200px;
 }
 
 button{
-  background-color: red;
+  background-color: #0cb157;
   color: white;
   padding: 10px 20px;
   border: none;
   outline: none;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.tab-container{
+  display: flex;
 }
 </style>

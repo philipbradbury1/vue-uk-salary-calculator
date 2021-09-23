@@ -27,7 +27,7 @@ export default {
 
 <style>
     .panel{
-        border: 1px solid #cfcfcf;
-        padding-bottom: 20px;
+        
+        flex: 100%;
     }
 </style>

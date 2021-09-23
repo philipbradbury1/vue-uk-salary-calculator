@@ -1,5 +1,5 @@
 <template>
-   <div>
+   <div class="tabs-container">
     <ul class='tabs__header'>
       <li v-for='tab in tabTitles' 
       :key='tab'
@@ -41,6 +41,16 @@ export default {
 
 <style scoped>
 
+.tabs-container{
+  display: flex;
+  flex: 100%;
+  border: 1px solid #cfcfcf;
+ border-radius: 10px;
+ background: #fff;
+-webkit-box-shadow: 4px 4px 15px 0px #000000; 
+box-shadow: 4px 4px 15px 0px #000000;
+}
+
 
 
 .tabs{
@@ -49,11 +59,13 @@ export default {
 }
 
 .tabs__header {
-    margin-bottom: 0px;
+    margin: 0px;
     list-style: none;
     padding: 0;
+    width: 200px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    background: #6be790;
 }
 
 .tabs__header li{

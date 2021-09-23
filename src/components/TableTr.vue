@@ -26,8 +26,7 @@ export default {
         salaryConvert(salary){
 
             if(this.item.name == 'Year'){
-                console.log(salary)
-                return salary.map(x => x.toFixed(2) );
+                return salary.map(x => x.toFixed(2));
             }
             if(this.item.name == 'Month'){
                  const month = this.salary.map(x => (x / 12).toFixed(2))
@@ -41,7 +40,6 @@ export default {
                 const week = this.salary.map(x => (x / 26).toFixed(2))
                 return week
             }
-
             if(this.item.name == 'Weekly'){
                 const week = this.salary.map(x => (x / 52).toFixed(2))
                 return week

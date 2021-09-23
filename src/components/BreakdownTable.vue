@@ -22,17 +22,12 @@
 <script>
 
 function taxLetter(code){
-
-  let codes = ['OT', 'BR', 'C' , 'COT','CBR','CD0','CD1','D0','D1','L','M','N','NT','S','SOT','SBR','SD0','SD1','SD2','T'];
-
+  let codes = ['OT','BR','C','COT','CBR','CD0','CD1','D0','D1','L','M','N','NT','S','SOT','SBR','SD0','SD1','SD2','T'];
   let confirmedCode = codes.find(element => code.includes(element));
-
   return confirmedCode
-
 }
 
 var nationalInsurance = function(salary){
- 
   if(salary <= 9564){
     return 0
   }else if(salary <= 50268){
@@ -121,17 +116,13 @@ export default {
        deep:true,
 
        handler(val){
-
           let totalLoan = 0;
-
           if(this.salary > 19884 && val.repaymentplan1){
             totalLoan += Math.floor( ((this.salary - 19884) / 12).toFixed(5) * 0.09 ); 
           }
-
           if(this.salary > 27288 && val.repaymentplan2 && !val.repaymentplan1){
             totalLoan += Math.floor( ((this.salary - 27288) / 12).toFixed(5) * 0.09 );
           }
-
           if(this.salary > 21000 && val.postgradloan){
             totalLoan += Math.trunc( ((this.salary - 21000) /12 ).toFixed(5) * 0.06  );
           }
@@ -139,37 +130,26 @@ export default {
        }
     },
     pension:function(){
-
         let tempSal = this.salary
-
         if(tempSal > 6240){
-
           if(tempSal > 50270){ tempSal = 50270}
-          
           return this.pensionAmount = (tempSal - 6240) / 100 * this.pension
         }
-
       return this.pensionAmount = 0
     },
 
   },
    computed:{
      yearlySalary(){
-
         if(this.salary > 0){
-
-          console.log('tax check',this.taxFree)
-        
           let salary = this.salary;
           let pension = this.pensionAmount;
           let tax = this.taxAmount(salary, this.userTaxCode); 
-          let taxable = ((this.salary - this.taxFree) < 0)? 0 : this.salary - this.taxFree;
+          let taxable = ((this.salary - this.taxFree) < 0) ? 0 : this.salary - this.taxFree;
           let nI = nationalInsurance(salary);
           let loan = this.studentLoan;
           let takeHome = salary - (tax + nI);
-
-          return [Number(salary),pension, tax, taxable, nI, loan, takeHome];
-          
+          return [Number(salary),pension, taxable, tax, nI, loan, takeHome];
         }
         return null
      },
@@ -190,9 +170,7 @@ export default {
         let taxFreeAmount = 12570;
 
         if(confirmedTaxCode == "L"){
-
-          taxFreeAmount = taxCode.replace(confirmedTaxCode,'0')
-
+          taxFreeAmount = taxCode.replace(confirmedTaxCode,'0');
         }
 
         this.taxFree = taxFreeAmount
@@ -215,12 +193,16 @@ export default {
         return salary * 0.20
       }
 
+      if(taxCode == 'OT'){
+        this.taxFree = 0;
+        return salary * 0.20
+      }
+
       return null
 
     }
      
    }
-  
 }
 </script>
 

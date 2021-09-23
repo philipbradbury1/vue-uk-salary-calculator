@@ -17,19 +17,16 @@ export default {
     },
     methods:{
         checkTaxCode(){
-
-            const regEx = new RegExp("^(BR|D0|NT)$|^(([Kk]{1}[1-9]{1}[0-9]{2,3}$)|([1-9]{1}[0-9]{2,3}[LPTYlpty]{1}$))")
-
-            if(!regEx.test(this.taxcode)){
+            const regEx = new RegExp("^(BR|D0|NT|OT)$|^(([Kk]{1}[1-9]{1}[0-9]{2,3}$)|([1-9]{1}[0-9]{2,3}[LPTYlpty]{1}$))")
+            if(!regEx.test(this.taxcode)){ 
               return  this.inputError = true;
             }
-             
-            return this.inputError = false;
+            return this.inputError = false; 
         },
         getTaxCode(){
-            if(!this.inputError){
+            if(!this.inputError){ 
                 this.$emit("tax-code", this.taxcode)
-            }
+           } 
         }
     }
 }
